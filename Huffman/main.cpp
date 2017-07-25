@@ -50,7 +50,7 @@ int main(int argc, char *argv[]) {
 	setlocale(LC_ALL, "ru-RU");
 
 	if (argc != 3) {
-		cout << "Не верно введены параметры запуска" << endl;
+		cout << "Bad arguments" << endl;
 		system("pause");
 		return 1337;
 	}
