@@ -40,7 +40,7 @@ void BuildTable(Node *root, vector<bool> &code, map<char, vector<bool>> &table)
 }
 
 inline string getFileType(string file) {
-	int id = file.find_last_of('.');
+	size_t id = file.find_last_of('.');
 	if (id != string::npos)
 		return file.substr(id + 1);
 	else return "";
@@ -52,10 +52,10 @@ int main(int argc, char *argv[]) {
 	if (argc != 3) {
 		cout << "Не верно введены параметры запуска" << endl;
 		system("pause");
-		return 1337; // leet error
+		return 1337;
 	}
 	else {
-		if (argv[2] == "1") { // compressor
+		if (argv[2] == "1") {
 			ifstream in(argv[0], ios::out | ios::binary);
 			map<char, int> m; 			  
 
@@ -68,16 +68,6 @@ int main(int argc, char *argv[]) {
 			}
 
 			list<Node*> t;
-			/*
-				Почему лист?
-				Этот контейнер позволяет легко вставлять элементы в произвольные места
-				и быстро встраивать элементы в разные места
-
-				Мы используем его для быстрого взятия и удаления первого элемента. 
-				А так же для вставки в конец.
-
-				По своей реализации лист - это список, а не массив
-			*/
 
 			for (auto i : m) {
 				Node *p = new Node;
@@ -88,18 +78,13 @@ int main(int argc, char *argv[]) {
 
 			while (t.size() != 1) {
 				t.sort([](const Node *l, const Node *r) -> bool {
-					return l->a < r->a; // сортировка по неубыванию
+					return l->a < r->a;
 				});
 
 				Node *SonL = t.front();
 				t.pop_front();
 				Node *SonR = t.front();
-				t.pop_front();
-
-				/*
-					Убираем мелкие части, добавляем крупные.
-					В итоге останется только одна, крупная часть дерева
-				*/
+				t.pop_front()
 
 				t.push_back(new Node(SonL, SonR));
 			}
@@ -136,26 +121,13 @@ int main(int argc, char *argv[]) {
 			out.close();
 			in.close();
 		}
-		else if (argv[2] == "2") { // decompressor
+		else if (argv[2] == "2") {
 
 		}
-		else { // ERROR (not leet)
+		else { 
 
 		}
 	}
-
-	/*
-		ЭТО ДЕКОМПРЕССИЯ, ЕЕ НАДО ДОДЕЛАТЬ ПОД ТЗ
-		JUST DO IT!!!!
-
-		КОД ГОТОВ НА ~69%~
-
-		TODO:
-			Тип входного файла
-			Количество узлов в дереве
-			Количество бит в последней байте
-			Дерево в прямом порядке обхода
-	*/
 
 	/*
 	ifstream compressedIn("compressed.bin", ios::in | ios::binary);
