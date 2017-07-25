@@ -1,0 +1,2 @@
+This is my text string for compressing
+And it support lines!!!!
