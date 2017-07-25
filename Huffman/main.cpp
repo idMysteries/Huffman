@@ -84,7 +84,7 @@ int main(int argc, char *argv[]) {
 				Node *SonL = t.front();
 				t.pop_front();
 				Node *SonR = t.front();
-				t.pop_front()
+				t.pop_front();
 
 				t.push_back(new Node(SonL, SonR));
 			}
