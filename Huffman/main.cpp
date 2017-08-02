@@ -10,7 +10,7 @@ using namespace std;
 
 class Node {
 public:
-	int a;
+	int a=0;
 	char c=0;
 	Node *left = 0, *right = 0;
 	Node() {};
@@ -22,8 +22,7 @@ public:
 	}
 };
 
-void BuildTable(Node *root, vector<bool> &code, map<char, vector<bool>> &table) 
-{
+void BuildTable(Node *root, vector<bool> &code, map<char, vector<bool>> &table) { // I'm wanna using *while* or *for*
 	if (root->left) {
 		code.push_back(0);
 		BuildTable(root->left, code, table);
@@ -39,10 +38,22 @@ void BuildTable(Node *root, vector<bool> &code, map<char, vector<bool>> &table)
 	if (code.size()) code.pop_back();
 }
 
+void WriteTree(Node *root, ofstream &out) {
+	out << root->a << root->c;
+	
+	if (root->left) {
+		WriteTree(root->left, out);
+	}
+
+	if (root->right) {
+		WriteTree(root->right, out);
+	}
+}
+
 inline string getFileType(string file) {
-	size_t id = file.find_last_of('.');
+	size_t id = file.find_last_of('.'); // example.exe.txt.zip
 	if (id != string::npos)
-		return file.substr(id + 1);
+		return file.substr(id + 1);		// zip
 	else return "";
 }
 
@@ -58,7 +69,7 @@ int main(int argc, char *argv[]) {
 		if (argv[2] == "1") {
 			ifstream in(argv[0], ios::out | ios::binary);
 			map<char, int> m; 			  
-
+			int nodesCount = 0;
 			string fileType = getFileType(argv[0]);
 			
 			while (!in.eof()) {
@@ -67,7 +78,9 @@ int main(int argc, char *argv[]) {
 				m[c]++;
 			}
 
-			list<Node*> t;
+			nodesCount = m.size();
+
+			list<Node*> t(nodesCount);
 
 			for (auto i : m) {
 				Node *p = new Node;
@@ -93,14 +106,18 @@ int main(int argc, char *argv[]) {
 
 			vector<bool> code;
 			
-			map<char, vector<bool> > table;
+			map<char, vector<bool>> table;
 			BuildTable(root, code, table);
 
 			in.clear();
 			in.seekg(0);
 
 			ofstream out(argv[1]);
+			out << fileType;
+			out << nodesCount;
 			int count = 0; char byte = 0;
+						
+			vector<char> bytes;
 
 			while (!in.eof()) {
 				char c;
@@ -113,11 +130,29 @@ int main(int argc, char *argv[]) {
 					count++;
 					if (count == 8) {
 						count = 0;
-						out << byte;
+						bytes.push_back(byte);
 						byte = 0;
 					}
 				}
 			}
+
+			char lastByte = bytes.at(bytes.size() - 1);
+
+			char lastBitsCount = 0;
+
+			for (int i = 0; i < 8; i++) {
+				if (lastByte >> i) {
+					lastBitsCount++;
+				}
+			}
+
+			out << lastBitsCount;
+			WriteTree(root, out);
+
+			for (char ch : bytes) {
+				out << ch;
+			}
+
 			out.close();
 			in.close();
 		}
