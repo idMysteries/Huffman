@@ -39,8 +39,9 @@ void BuildTable(Node *root, vector<bool> &code, map<char, vector<bool>> &table) 
 }
 
 void WriteTree(Node *root, ofstream &out) {
-	out << root->a << root->c;
-	
+	out << root->c;
+	out.write((char*)&root->a, sizeof root->a);
+
 	if (root->left) {
 		WriteTree(root->left, out);
 	}
@@ -59,7 +60,6 @@ inline string getFileType(string file) {
 
 int main(int argc, char *argv[]) {
 	setlocale(LC_ALL, "ru-RU");
-	cout << argc << endl;
 	if (argc != 4) {
 		cout << "Bad arguments" << endl;
 		system("pause");
@@ -70,7 +70,6 @@ int main(int argc, char *argv[]) {
 			cout << "Compression started" << endl;
 			ifstream in(argv[1], ios::out | ios::binary);
 			map<char, int> m; 			  
-			int nodesCount = 0;
 			string fileType = getFileType(argv[1]);
 			
 			while (!in.eof()) {
@@ -78,8 +77,6 @@ int main(int argc, char *argv[]) {
 				c = in.get();
 				m[c]++;
 			}
-
-			nodesCount = m.size();
 
 			list<Node*> t;
 			for (auto i : m) {
@@ -112,9 +109,9 @@ int main(int argc, char *argv[]) {
 			in.clear();
 			in.seekg(0);
 
-			ofstream out(argv[2]);
-			out << fileType;
-			out << nodesCount;
+			ofstream out(argv[2], ios::binary | ios::out);
+			out.write((char*)&fileType, fileType.size() + 1);
+			
 			int count = 0; char byte = 0;
 						
 			vector<char> bytes;
@@ -146,12 +143,15 @@ int main(int argc, char *argv[]) {
 				}
 			}
 
-			out << lastBitsCount;
+			int nodesCount = bytes.size();
+
+			out.write((char*)&nodesCount, sizeof nodesCount);
+			out.write((char*)&lastBitsCount, sizeof lastBitsCount);
 			WriteTree(root, out);
 
-			for (char ch : bytes) {
-				out << ch;
-			}
+			out.write((char*)&bytes, bytes.size());
+
+			cout << bytes.size() << endl;
 
 			out.close();
 			in.close();
