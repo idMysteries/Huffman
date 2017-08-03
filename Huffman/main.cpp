@@ -59,18 +59,19 @@ inline string getFileType(string file) {
 
 int main(int argc, char *argv[]) {
 	setlocale(LC_ALL, "ru-RU");
-
-	if (argc != 3) {
+	cout << argc << endl;
+	if (argc != 4) {
 		cout << "Bad arguments" << endl;
 		system("pause");
 		return 1337;
 	}
 	else {
-		if (argv[2] == "1") {
-			ifstream in(argv[0], ios::out | ios::binary);
+		if (string(argv[3]) == "1") {
+			cout << "Compression started" << endl;
+			ifstream in(argv[1], ios::out | ios::binary);
 			map<char, int> m; 			  
 			int nodesCount = 0;
-			string fileType = getFileType(argv[0]);
+			string fileType = getFileType(argv[1]);
 			
 			while (!in.eof()) {
 				char c;
@@ -80,8 +81,7 @@ int main(int argc, char *argv[]) {
 
 			nodesCount = m.size();
 
-			list<Node*> t(nodesCount);
-
+			list<Node*> t;
 			for (auto i : m) {
 				Node *p = new Node;
 				p->c = i.first;
@@ -112,7 +112,7 @@ int main(int argc, char *argv[]) {
 			in.clear();
 			in.seekg(0);
 
-			ofstream out(argv[1]);
+			ofstream out(argv[2]);
 			out << fileType;
 			out << nodesCount;
 			int count = 0; char byte = 0;
@@ -155,8 +155,9 @@ int main(int argc, char *argv[]) {
 
 			out.close();
 			in.close();
+			cout << "Compression finished" << endl;
 		}
-		else if (argv[2] == "2") {
+		else if (argv[3] == "2") {
 
 		}
 		else { 
@@ -190,5 +191,6 @@ int main(int argc, char *argv[]) {
 	compressedIn.close();
 	decompressedOut.close();
 	*/
+	system("pause");
 	return 0;
 }
