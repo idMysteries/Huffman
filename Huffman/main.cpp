@@ -44,23 +44,6 @@ void buildTable(Node *root, vector<bool> &code, map<char, vector<bool>> &table) 
 	if (code.size()) code.pop_back();
 }
 
-void writeTree(Node *root, ofstream &out, int k = 0) {
-	out << root->c;
-	out.write((char*)&root->a, sizeof root->a);
-
-	cout << root->c << ':' << root->a << ' ' << k << endl;
-
-	if (root->left) {
-		cout  << 'L';
-		writeTree(root->left, out, k + 1);
-	}
-
-	if (root->right) {
-		cout << 'R';
-		writeTree(root->right, out, k + 1);
-	}
-}
-
 inline string getFileType(string file) {
 	auto id = file.find_last_of('.'); // example.exe.txt.zip
 	if (id != string::npos)
