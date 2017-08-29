@@ -48,15 +48,11 @@ void writeTree(Node *root, ofstream &out, int k = 0) {
 	out << root->c;
 	out.write((char*)&root->a, sizeof root->a);
 
-	cout << root->c << ':' << root->a << ' ' << k << endl;
-
 	if (root->left) {
-		cout  << 'L';
 		writeTree(root->left, out, k + 1);
 	}
 
 	if (root->right) {
-		cout << 'R';
 		writeTree(root->right, out, k + 1);
 	}
 }
