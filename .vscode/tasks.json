@@ -10,7 +10,7 @@
                 "-Wall",
                 "-std=c++14",
                 "-O3",
-                "${relativeFile}",
+                "*.cpp",
                 "-o",
                 "Release/${workspaceRootFolderName}.exe"
             ],
@@ -27,7 +27,7 @@
                 "-Wall",
                 "-std=c++14",
                 "-g",
-                "${relativeFile}",
+                "*.cpp",
                 "-o",
                 "Debug/${workspaceRootFolderName}.exe"
             ],
